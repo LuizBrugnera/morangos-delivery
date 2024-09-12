@@ -1,11 +1,17 @@
-import { Home } from "./componentes/Home";
+import { Home } from "./pages/Home";
+import React, { Fragment } from "react";
+import Cart from "./pages/Cart";
+import { Route, Routes } from "react-router-dom";
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div>
-      <Home></Home>
-    </div>
+    <Fragment>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/cart" element={<Cart />} />
+      </Routes>
+    </Fragment>
   );
-}
+};
 
 export default App;
