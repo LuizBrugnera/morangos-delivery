@@ -7,26 +7,23 @@ import {
   Instagram,
   Twitter,
 } from "lucide-react";
+import { About } from "@/components/About";
 
 export const Home = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
-      {/* Cabeçalho */}
+    <div className="flex flex-col min-h-screen bg-white ">
       <header className="bg-red-600 text-white shadow-md">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="text-2xl font-bold">🍓 Morango Express</div>
           <nav className="hidden md:flex space-x-4">
-            <a href="#" className="hover:text-red-200">
+            <a href="/home" className="hover:text-red-200">
               Início
             </a>
-            <a href="#" className="hover:text-red-200">
+            <a href="#products" className="hover:text-red-200">
               Produtos
             </a>
-            <a href="#" className="hover:text-red-200">
+            <a href="#about" className="hover:text-red-200">
               Sobre
-            </a>
-            <a href="#" className="hover:text-red-200">
-              Contato
             </a>
           </nav>
           <div className="flex items-center space-x-4">
@@ -56,7 +53,10 @@ export const Home = () => {
       {/* Produtos em Destaque */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-red-800 mb-12">
+          <h2
+            className="text-3xl font-bold text-center text-red-800 mb-12"
+            id="products"
+          >
             Nossos Produtos
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -89,7 +89,9 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* Rodapé */}
+      <div id="about"></div>
+      <About />
+
       <footer className="bg-red-800 text-white py-8 mt-auto">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
