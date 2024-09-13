@@ -5,48 +5,55 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
 const Cart = () => {
-  const [itens, setItens] = React.useState([
+  const numberToReal = (value: number) => {
+    return value.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+  };
+
+  const [items, setItems] = React.useState([
     {
       id: 1,
-      nome: "Morango Tradicional",
-      preco: 15.99,
-      quantidade: 2,
+      name: "Morango Tradicional",
+      price: 15.99,
+      quantity: 2,
       imagem: "/placeholder.svg?height=80&width=80",
     },
     {
       id: 2,
-      nome: "Morango Orgânico",
-      preco: 19.99,
-      quantidade: 1,
+      name: "Morango Orgânico",
+      price: 19.99,
+      quantity: 1,
       imagem: "/placeholder.svg?height=80&width=80",
     },
     {
       id: 3,
-      nome: "Cesta Mista",
-      preco: 29.99,
-      quantidade: 1,
+      name: "Cesta Mista",
+      price: 29.99,
+      quantity: 1,
       imagem: "/placeholder.svg?height=80&width=80",
     },
   ]);
 
-  const alterarQuantidade = (id: number, delta: number) => {
-    setItens(
-      itens
+  const changeQuantity = (id: number, delta: number) => {
+    setItems(
+      items
         .map((item) =>
           item.id === id
-            ? { ...item, quantidade: Math.max(0, item.quantidade + delta) }
+            ? { ...item, quantity: Math.max(0, item.quantity + delta) }
             : item
         )
-        .filter((item) => item.quantidade > 0)
+        .filter((item) => item.quantity > 0)
     );
   };
 
-  const removerItem = (id: number) => {
-    setItens(itens.filter((item) => item.id !== id));
+  const removeItem = (id: number) => {
+    setItems(items.filter((item) => item.id !== id));
   };
 
-  const total = itens.reduce(
-    (sum, item) => sum + item.preco * item.quantidade,
+  const total = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
     0
   );
 
@@ -54,14 +61,19 @@ const Cart = () => {
     <div className="min-h-screen bg-gray-100">
       <header className="bg-red-600 text-white py-4">
         <div className="container mx-auto px-4">
-          <h1 className="text-2xl font-bold">🍓 Morango Express</h1>
+          <a
+            className="text-2xl font-bold select-none cursor-pointer"
+            href="/home"
+          >
+            🍓 Morango Express
+          </a>
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-8">
         <div className="flex items-center mb-6">
-          <ArrowLeft className="mr-2" />
-          <a href="#" className="text-red-600 hover:underline">
+          <a href="/home" className="flex text-red-600 hover:underline">
+            <ArrowLeft className="mr-2" />
             Continuar Comprando
           </a>
         </div>
@@ -69,33 +81,33 @@ const Cart = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-2">
             <h2 className="text-2xl font-semibold mb-4">Seu Carrinho</h2>
-            {itens.map((item) => (
+            {items.map((item) => (
               <div
                 key={item.id}
                 className="flex items-center bg-white p-4 rounded-lg shadow mb-4"
               >
                 <img
                   src={item.imagem}
-                  alt={item.nome}
+                  alt={item.name}
                   className="w-20 h-20 object-cover rounded mr-4"
                 />
                 <div className="flex-grow">
-                  <h3 className="font-semibold">{item.nome}</h3>
-                  <p className="text-gray-600">R$ {item.preco.toFixed(2)}</p>
+                  <h3 className="font-semibold">{item.name}</h3>
+                  <p className="text-gray-600"> {numberToReal(item.price)}</p>
                 </div>
                 <div className="flex items-center">
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => alterarQuantidade(item.id, -1)}
+                    onClick={() => changeQuantity(item.id, -1)}
                   >
                     <Minus className="h-4 w-4" />
                   </Button>
-                  <span className="mx-2">{item.quantidade}</span>
+                  <span className="mx-2">{item.quantity}</span>
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => alterarQuantidade(item.id, 1)}
+                    onClick={() => changeQuantity(item.id, 1)}
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -104,7 +116,7 @@ const Cart = () => {
                   variant="ghost"
                   size="icon"
                   className="ml-4"
-                  onClick={() => removerItem(item.id)}
+                  onClick={() => removeItem(item.id)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -116,12 +128,12 @@ const Cart = () => {
             <div className="bg-white p-6 rounded-lg shadow">
               <h2 className="text-xl font-semibold mb-4">Resumo do Pedido</h2>
               <div className="space-y-2 mb-4">
-                {itens.map((item) => (
+                {items.map((item) => (
                   <div key={item.id} className="flex justify-between">
                     <span>
-                      {item.nome} x{item.quantidade}
+                      {item.name} x{item.quantity}
                     </span>
-                    <span>R$ {(item.preco * item.quantidade).toFixed(2)}</span>
+                    <span>R$ {(item.price * item.quantity).toFixed(2)}</span>
                   </div>
                 ))}
               </div>
@@ -130,7 +142,10 @@ const Cart = () => {
                 <span>Total</span>
                 <span>R$ {total.toFixed(2)}</span>
               </div>
-              <Input className="mt-4" placeholder="Código de Desconto" />
+              <Input
+                className="mt-4 md:hidden"
+                placeholder="Código de Desconto"
+              />
               <Button className="w-full mt-4 bg-green-500 hover:bg-green-600">
                 <CreditCard className="mr-2 h-4 w-4" /> Finalizar Compra
               </Button>
@@ -139,7 +154,7 @@ const Cart = () => {
         </div>
       </main>
 
-      <footer className="bg-red-800 text-white py-4 mt-8">
+      <footer className="bg-red-800 text-white py-4 mt-8 margin-">
         <div className="container mx-auto px-4 text-center">
           <p>© 2023 Morango Express. Todos os direitos reservados.</p>
         </div>
